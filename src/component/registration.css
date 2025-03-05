@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: url('../imgs/MainBGImg.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    margin: 0px;
+}
+
+.signin-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.signin-form {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 1.2rem 1.5rem;
+    border-radius: 1px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    height: 520px;
+    text-align: center;
+}
+
+.heading {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #222;
+    font-weight: bold;
+}
+.name-container, .phone-email-container, .dob-gender-container {
+    display: flex;
+    justify-content: space-between;
+}
+.name{
+    width: 48%;
+}
+.signin-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    margin: 3px 2px;
+    color: #333;
+
+}
+
+.signin-input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease-in-out;
+    background: #f9f9f9;
+}
+
+.signin-input:focus {
+    border-color: #198754;
+    outline: none;
+    background: white;
+}
+
+.error-message {
+    color: red;
+    font-size: 10px;
+    text-align: left;
+    height: 4px;
+}
+
+.signin-button {
+    width: 100%;
+    padding: 8px;
+    background: #198754;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin-top: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.signin-button:hover {
+    background: #01763f;
+}
+
+.extra-links {
+    display: flex;
+    justify-content: end;
+    margin-top: 13px;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #198754;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.link-button:hover {
+    color: #01763f;
+}
+
+@media (max-width: 480px) {
+    .login-form {
+        width: 90%;
+        padding: 25px;
+    }
+
+    .extra-links {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
