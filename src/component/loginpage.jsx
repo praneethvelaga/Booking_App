@@ -48,7 +48,7 @@ function Loginpage() {
         <h1 className="heading">Log In</h1>
 
         <label className="login-label">
-          Email or Employee ID
+          Email
           <input
             type="email"
             name="email"
