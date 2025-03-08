@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Home, XCircle, Map, Calendar, Menu, User } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import bgImage from "../imgs/MainBGImg.jpg";
-import './home.css'
-import { useNavigate, useNavigation } from "react-router-dom";
+import bgImage from "../../imgs/MainBGImg.jpg";
+import './index.css'
+import { useNavigate,useParams} from "react-router-dom";
+
+import Profile from "../Profile";
 
 function HomeComponent() {
   const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
@@ -12,6 +14,8 @@ function HomeComponent() {
   const profileClass = profileView ? 'profile-view' : ''
   const today = new Date().toISOString().split("T")[0];
   const navigation=useNavigate();
+  const {id}=useParams()
+  console.log(id)
   const handelHomeClick=()=>{
     navigation('/home')
   }
@@ -48,11 +52,7 @@ function HomeComponent() {
           </button>
       </div>
       <div className={`profile ${profileClass}`}>
-        <div className="profile-img">
-          <img src="https://img.freepik.com/premium-vector/man-professional-business-casual-young-avatar-icon-illustration_1277826-622.jpg"/>
-        </div>
-        <h3>Rahul</h3>
-        <p>rahul@2025</p>
+         <Profile/>
       </div>
 
       {/* Sidebar */}
@@ -68,7 +68,7 @@ function HomeComponent() {
             { id: "cancel", icon: <XCircle size={20} />, text: "Cancel Ticket" },
             { id: "track", icon: <Map size={20} />, text: "Track Service" },
             { id: "timetable", icon: <Calendar size={20} />, text: "Time Table / Track" }].map((menu) => (
-            <a key={menu.id} href="#" className={`d-flex align-items-center gap-2 text-decoration-none text-dark ${selectedMenu === menu.id ? "fw-bold text-primary" : ""}`} onClick={() => handleMenuClick(menu.id)}>
+            <a key={menu.id} href="#123" className={`d-flex align-items-center gap-2 text-decoration-none text-dark ${selectedMenu === menu.id ? "fw-bold text-primary" : ""}`} onClick={() => handleMenuClick(menu.id)}>
               {menu.icon} {!collapsed && <span>{menu.text}</span>}
             </a>
           ))}

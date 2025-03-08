@@ -1,10 +1,10 @@
 import React, { useState } from "react"; 
-import "./registration.css";
-import { useNavigate } from "react-router-dom";
+import "./index.css";
+import { useNavigate,Link } from "react-router-dom";
 
 function Registration() {
   const [fullName, setFullName] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [mobileNumber, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +20,7 @@ function Registration() {
     let newErrors = {};
 
     if (!fullName.trim()) newErrors.fullName = "Full Name is required";
-    if (!mobile.match(/^[0-9]{10}$/)) newErrors.mobile = "Invalid Mobile Number";
+    if (!mobileNumber.match(/^[0-9]{10}$/)) newErrors.mobileNumber = "Invalid Mobile Number";
     if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/))
       newErrors.email = "Invalid Email Address";
     if (!username.trim()) newErrors.username = "Username is required";
@@ -37,12 +37,40 @@ function Registration() {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Form Submitted Successfully");
+  
+    if (!validateForm()) {
+      console.log("Form validation failed");
+      return; // Stop execution if form is invalid
+    }
+  
+    console.log("Form Submitted Successfully");
+  
+    const url = "https://apsrtc-demo.onrender.com/register";
+    const dataDetails = { fullName, mobileNumber, email, username, password, address, pincode };
+  
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataDetails),
+    };
+  
+    try {
+      const response = await fetch(url, options);
+      const data=await response.json()
+      if (response.ok) {
+        console.log(data)
+        navigate('/login')
+      }
+      
+    } catch (error) {
+      console.error("Request failed:", error.message);
     }
   };
+  
 
   return (
     <div className="signin-container">
@@ -67,12 +95,12 @@ function Registration() {
           <input
             type="tel"
             className="signin-input"
-            value={mobile}
+            value={mobileNumber}
             onChange={(e) => setMobile(e.target.value)}
             placeholder="Enter mobile number"
             required
           />
-          <span className="error-message">{errors.mobile}</span>
+          <span className="error-message">{errors.mobileNumber}</span>
         </label>
 
         <label className="signin-label">
@@ -155,6 +183,7 @@ function Registration() {
 
         <button type="submit" className="signin-button">Register</button>
 
+        <p>if you an APSRTC Employee<Link to='/employee-login'>Login here</Link></p>
         <div className="extra-links">
           <button type="button" className="link-button" onClick={() => navigate('/login')}>Log in</button>
         </div>
