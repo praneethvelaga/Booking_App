@@ -8,6 +8,7 @@ function Loginpage() {
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState(""); // State for invalid credentials
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
@@ -18,14 +19,13 @@ function Loginpage() {
     let isValid = true;
     setUsernameError("");
     setPasswordError("");
+    setLoginError(""); // Reset login error on new submit
 
-    // Username validation (at least 4 characters)
     if (username.trim().length < 4) {
       setUsernameError("Username must be at least 4 characters long");
       isValid = false;
     }
 
-    // Password validation (1 uppercase letter, 1 number, min 6 chars)
     const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!password.match(passwordPattern)) {
       setPasswordError(
@@ -37,28 +37,21 @@ function Loginpage() {
     return isValid;
   };
 
-  const onLoginSuccess = (jwtToken,id) => {
-    console.log("JWT Token received:", jwtToken);
+  const onLoginSuccess = (jwtToken, id) => {
     if (!jwtToken) {
       console.error("No JWT token received, login failed.");
       return;
     }
     Cookies.set("jwt_token", jwtToken, { expires: 1 });
     Cookies.set("id", id, { expires: 1 });
-    console.log("Navigating to /home...");
     navigate("/home");
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) {
-      console.log("Validation failed");
       return;
     }
-
-    console.log("Form submitted");
 
     const userDetails = { username, password };
     const url = "https://apsrtc-demo.onrender.com/login";
@@ -74,16 +67,13 @@ function Loginpage() {
       const response = await fetch(url, options);
       const data = await response.json();
 
-      console.log("Response:", response.status, data);
-
       if (response.ok) {
-        console.log(data)
-        onLoginSuccess(data.jwtToken,data.id)
+        onLoginSuccess(data.jwtToken, data.id);
       } else {
-        console.error("Login failed:", data.message || "Invalid credentials");
+        setLoginError("Invalid username or password"); // Set error message on failure
       }
     } catch (error) {
-      console.error("Request failed:", error.message);
+      setLoginError("Something went wrong. Please try again.");
     }
   };
 
@@ -92,11 +82,12 @@ function Loginpage() {
       <form className="login-form" onSubmit={handleSubmit}>
         <h1 className="heading">Log In</h1>
 
+        {loginError && <p className="error-message">{loginError}</p>} {/* Display login error only once */}
+
         <label className="login-label">
           Username
           <input
             type="text"
-            name="username"
             className="login-input"
             placeholder="Enter your username"
             value={username}
@@ -110,7 +101,6 @@ function Loginpage() {
           Password
           <input
             type="password"
-            name="password"
             className="login-input"
             placeholder="Enter your password"
             value={password}
@@ -128,11 +118,7 @@ function Loginpage() {
           <button type="button" className="link-button">
             Forgot Password?
           </button>
-          <button
-            type="button"
-            className="link-button"
-            onClick={handleRegisterClick}
-          >
+          <button type="button" className="link-button" onClick={handleRegisterClick}>
             Register
           </button>
         </div>
@@ -142,3 +128,5 @@ function Loginpage() {
 }
 
 export default Loginpage;
+
+

@@ -7,6 +7,7 @@ const EmployeeLogin = () => {
   const [empId, setEmpId] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loginError, setLoginError] = useState(""); // State to store login error
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -28,21 +29,20 @@ const EmployeeLogin = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const onLoginSuccess = (jwtToken, id) => {
+    if (!jwtToken) {
+      console.error("No JWT token received, login failed.");
+      return;
+    }
+    Cookies.set("jwt_token", jwtToken, { expires: 1 });
+    Cookies.set("id", id, { expires: 1 });
+    navigate("/home");
+  };
 
-  const onLoginSuccess = (jwtToken,id) => {
-      console.log("JWT Token received:", jwtToken);
-      if (!jwtToken) {
-        console.error("No JWT token received, login failed.");
-        return;
-      }
-      Cookies.set("jwt_token", jwtToken, { expires: 1 });
-      Cookies.set("id", id, { expires: 1 });
-      console.log("Navigating to /home...");
-      navigate("/home");
-    };
-
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoginError(""); // Reset login error
+
     if (!validateForm()) {
       console.log("Logging Failed");
       return;
@@ -62,18 +62,14 @@ const EmployeeLogin = () => {
       const response = await fetch(url, options);
       const data = await response.json();
 
-      console.log("Response:", response.status, data);
-
       if (response.ok) {
-        console.log(data)
-        onLoginSuccess(data.jwtToken,data.id)
+        onLoginSuccess(data.jwtToken, data.id);
       } else {
-        console.error("Login failed:", data.message || "Invalid credentials");
+        setLoginError(data.message || "Invalid Employee ID or Password"); // Set login error message
       }
     } catch (error) {
-      console.error("Request failed:", error.message);
+      setLoginError("Request failed. Please try again.");
     }
-
   };
 
   return (
@@ -102,6 +98,8 @@ const EmployeeLogin = () => {
           )}
         </div>
 
+        {loginError && <p className="error-message">{loginError}</p>} {/* Display login error */}
+
         <button
           type="submit"
           className="login-button"
@@ -115,3 +113,4 @@ const EmployeeLogin = () => {
 };
 
 export default EmployeeLogin;
+
